@@ -4,6 +4,7 @@ import requests
 import urllib.request
 import os
 import re
+import datetime as dt
 
 def getHtmlStr(url):
     headers = {
@@ -29,8 +30,10 @@ def downloadPictures(url, save_path):
     regexImg = re.compile(regex)
     imgList = regexImg.findall(getHtmlStr(url))
 
+    n = 0
     for img in imgList:
-        print('#'*2, img)
+        print('_%d_' % n, img)
+        n += 1
 
     if not os.path.exists(save_path):
             os.makedirs(save_path)
@@ -45,7 +48,7 @@ testTiebaUrl = r'https://tieba.baidu.com/f?ie=utf-8&kw=%E5%A3%81%E7%BA%B8'
 curFilePath = os.path.dirname(__file__)
 saveFilePathTest = curFilePath + '/savedFiles/'
 curExePath = os.getcwd()
-saveFilePath = curExePath + '/savedFiles/'
+saveFilePath = curExePath + '/savedFiles/' + dt.datetime.now().strftime(r'%Y%m%d-%H%M%S/')
 
 # downloadPictures(testUrl, saveFilePath)
 
@@ -78,26 +81,32 @@ def userGetPicturesByPostID(save_path, max_download = 10):
     if not os.path.exists(os.path.realpath(save_path)):
         os.makedirs(os.path.realpath(save_path))
 
+    n = 0
     for i in range(max_download):
+        if n < len(postIdList):
+            n += 1
+        else:
+            break
+
         if not os.path.exists(os.path.realpath(save_path + postIdList[i])):
             os.makedirs(os.path.realpath(save_path + postIdList[i]))
 
-        print('-' * 10 ,r'开始抓取' + postIdList[i], '-' * 10)
+        print('\n' + '-' * 10 ,r'开始抓取' + postIdList[i], '-' * 10)
         downloadPictures(urlList[i], save_path + postIdList[i] + '/')
-        print('-' * 10 ,r'下载成功', '-' * 10)
+        print('-' * 10 ,r'下载成功' + postIdList[i], '-' * 10)
 
-    
     os.system("explorer.exe %s" % os.path.realpath(save_path))
     input(r'按任意键结束')
 
 if __name__ == "__main__":
     choice = input('请输入要抓取的类型 1->单个帖子，2->某个贴吧：')
     choice = int(choice)
+
     if 1 == choice:
         userGetPicture(saveFilePath)
     elif 2 == choice:
         cnt = input('请输入本次最多希望抓取的帖子数：')
         if int(cnt) > 0:
-            userGetPicturesByPostID(saveFilePathTest, int(cnt))
+            userGetPicturesByPostID(saveFilePath, int(cnt))
     else:
         pass
