@@ -31,22 +31,21 @@ def downloadPictures(url, save_path):
     regexImg = re.compile(regex)
     imgList = regexImg.findall(getHtmlStr(url))
 
-    n = 0
+    n = 0; skip = 0
     for img in imgList:
         if img.find(skipPicFlag) < 0:
+            if not os.path.exists(save_path):
+                os.makedirs(save_path)
+
             print('_%d_' % n, img)
+            urllib.request.urlretrieve(img, save_path + '%s.jpg' %n)
             n += 1
         elif len(imgList) == 1:
-            print(r'略过图片')
+            print(r'略过')
+            skip = 1
+    
+    return skip
 
-    if not os.path.exists(save_path):
-            os.makedirs(save_path)
-
-    x = 0
-    for img in imgList:
-        if img.find(skipPicFlag) < 0:
-            urllib.request.urlretrieve(img, save_path + '%s.jpg' %x)
-            x += 1
 
 testUrl = r'http://tieba.baidu.com/p/1753935195'
 testTiebaUrl = r'https://tieba.baidu.com/f?ie=utf-8&kw=%E5%A3%81%E7%BA%B8'
@@ -91,20 +90,14 @@ def getPicturesByPostID(save_path, max_download = 10, input_name_mode = False):
     if True == input_name_mode:
         print('↓'*10, name + '吧开始', '↓'*10)
 
-    n = 0
-    for i in range(max_download):
-        if n < len(postIdList):
-            n += 1
-        else:
-            break
+    skipNum = 0
+    times = min(len(postIdList), max_download)
+    for i in range(times):
+        print('\n' + '-' * 10 ,r'开始抓取' + postIdList[i], '[%d/%d]' % (i + 1, times), '-' * 10)
+        skipNum += downloadPictures(urlList[i], save_path + postIdList[i] + '/')
+        print('-' * 10 ,r'抓取成功' + postIdList[i], '-' * 10)
 
-        if not os.path.exists(os.path.realpath(save_path + postIdList[i])):
-            os.makedirs(os.path.realpath(save_path + postIdList[i]))
-
-        print('\n' + '-' * 10 ,r'开始抓取' + postIdList[i], '-' * 10)
-        downloadPictures(urlList[i], save_path + postIdList[i] + '/')
-        print('-' * 10 ,r'下载成功' + postIdList[i], '-' * 10)
-
+    print('\n' + '#'*10, '下载了%d个帖子，略过了%d个帖子' % (times - skipNum, skipNum), '#'*10)
     if True == input_name_mode:
         print('\n' + '↑'*10, name + '吧结束', '↑'*10)
 
@@ -114,7 +107,7 @@ if __name__ == "__main__":
     print(r'TiebaSpider2.0 by ybs@20190719')
     while True:
         saveFilePath = os.getcwd() + '/savedFiles/' + dt.datetime.now().strftime(r'%Y%m%d-%H%M%S/')
-        choice = input('请输入要抓取的方式<1.帖子url，2.贴吧url，3.贴吧名字>：')
+        choice = input('请输入要抓取的方式<1.通过帖子url，2.通过贴吧url，3.通过贴吧名字>：')
         choice = int(choice)
 
         if 1 == choice:
