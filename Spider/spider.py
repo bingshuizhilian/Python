@@ -54,4 +54,5 @@ def userGetPicture(save_path):
     
     input(r'按任意键结束')
 
-userGetPicture(saveFilePath)
+if __name__ == "__main__":
+    userGetPicture(saveFilePath)
