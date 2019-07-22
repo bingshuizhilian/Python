@@ -65,10 +65,10 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-# 因使用者数据库配置和我的测试环境不一致，故关闭，配置好数据库后应打开下面三行注释
-# ITEM_PIPELINES = {
-#    'douban.pipelines.DoubanPipeline': 300,
-# }
+# 注意数据库配置
+ITEM_PIPELINES = {
+   'douban.pipelines.DoubanPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
