@@ -125,3 +125,4 @@ dmypy.json
 # added by me
 *.bat
 *.csv
+export_data/
