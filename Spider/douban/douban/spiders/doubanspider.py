@@ -10,6 +10,7 @@ class Douban(CrawlSpider):
     firstPageUrl = 'http://movie.douban.com/top250'
 
     def parse(self, response):
+        print('@'*15, response.request.headers['User-Agent'], '@'*15)
         item = DoubanItem()
         selector = Selector(response)
         movieInfos = selector.xpath("//div[@class='info']")
