@@ -3,7 +3,7 @@
 from functools import reduce
 
 
-# 1.传入函数/高阶函数
+### 1.传入函数/高阶函数
 # 把函数作为参数传入，这样的函数称为高阶函数，函数式编程就是指这种高度抽象的编程范式
 print('#'*10, '1.传入函数/高阶函数', 'start' if 1 else 'end', '#'*10)
 def add(a, b, f):
@@ -12,7 +12,7 @@ def add(a, b, f):
 print(add(-6, 9, abs))
 print('#'*10, '1.传入函数/高阶函数', 'start' if 0 else 'end', '#'*10)
 
-# 2.map
+### 2.map
 # map()将传入的函数依次作用到序列的每个元素，并把结果作为新的Iterator返回。
 print('#'*10, '2.map', 'start' if 1 else 'end', '#'*10)
 def f(x):
@@ -27,6 +27,7 @@ origList = [1,2,3];factor = 10
 print([i * factor for i in origList])
 print(list(map(lambda i:i*factor, origList)))
 
+# 练习
 def normalize(name):
     return name[0].upper() + name[1:].lower() # name[0] == name[:1]
 
@@ -35,7 +36,7 @@ L3 = list(map(normalize, L2))
 print(L3)
 print('#'*10, '2.map', 'start' if 0 else 'end', '#'*10)
 
-# 3.reduce
+### 3.reduce
 # reduce()把一个函数作用在一个序列[x1, x2, x3, ...]上，这个函数必须接收两个参数，reduce把结果继续和序列的下一个元素做累积计算。
 print('#'*10, '3.reduce', 'start' if 1 else 'end', '#'*10)
 r2 = reduce(lambda x,y:x+y, [x for x in range(9)])
@@ -67,6 +68,7 @@ def prod(L):
     return reduce(lambda x,y:x*y, L)
 print('3 * 5 * 7 * 9 =', prod([3, 5, 7, 9]))
 
+# 练习
 def str2float(s):
     l=s.split(".")
     d = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9}
@@ -77,7 +79,7 @@ def str2float(s):
 print('str2float(\'123.456789\') =', str2float('123.456789'))
 print('#'*10, '3.reduce', 'start' if 0 else 'end', '#'*10)
 
-# 4.filter
+### 4.filter
 # filter()把传入的函数依次作用于每个元素，然后根据返回值是True还是False决定保留还是丢弃该元素。
 print('#'*10, '4.filter', 'start' if 1 else 'end', '#'*10)
 # and: 只要左边的表达式为真，整个表达式返回的值是右边表达式的值，否则，返回左边表达式的值
@@ -110,7 +112,7 @@ for i in primes():
     else:
         break
 
-# 回数
+# 练习：回数
 # 回数是指从左向右读和从右向左读都是一样的数
 def is_palindrome(n):
     return str(n) == str(n)[::-1]
@@ -124,7 +126,7 @@ print('10~60:', list(output), list(output2))
 
 print('#'*10, '4.filter', 'start' if 0 else 'end', '#'*10)
 
-# 5.sorted
+### 5.sorted
 # 参数key指定的函数将作用于list的每一个元素上(不改变原始值)，并根据key函数返回的结果进行排序。
 print('#'*10, '5.sorted', 'start' if 1 else 'end', '#'*10)
 print(sorted([-5, 8, 0, -32, 99]))
@@ -139,7 +141,7 @@ def by_score(t): return -t[1]
 print(sorted(L5, key = by_name), sorted(L5, key = by_score))
 print('#'*10, '5.sorted', 'start' if 0 else 'end', '#'*10)
 
-# 6.返回函数
+### 6.返回函数
 ''' 复习函数参数开始
   # 位置参数：power(x, n) 函数有两个参数：x和n，这两个参数都是位置参数，调用函数时，传入的两个值按照位置顺序依次赋给参数x和n。
   # 默认参数：power(x, n=2) 1.必选参数在前，默认参数在后；2.当函数有多个参数时，把变化大的参数放前面，变化小的参数放后面。变化小的参数就可以作为默认参数；
@@ -224,7 +226,7 @@ def count2():
 
 f4, f5, f6 = count2()
 print(f4(), f5(), f6())
-# 利用闭包返回一个计数器函数，每次调用它返回递增整数
+# 练习：利用闭包返回一个计数器函数，每次调用它返回递增整数
 def createCounter():
     i = 0
     def counter():
@@ -259,7 +261,7 @@ counterB = createCounter3()
 print(counterB(), counterB(), counterB(), counterB())
 print('#'*10, '6.返回函数', 'start' if 0 else 'end', '#'*10)
 
-# 7.匿名函数
+### 7.匿名函数
 # 关键字lambda表示匿名函数。匿名函数有个限制，就是只能有一个表达式，不用写return，返回值就是该表达式的结果。
 print('#'*10, '7.匿名函数', 'start' if 1 else 'end', '#'*10)
 print(list(map(lambda x: x * x, [1, 2, 3, 4, 5, 6, 7, 8, 9])))
@@ -268,7 +270,7 @@ def g_lambda(a, b, f): return f(a, b)
 print(g_lambda(2, 2, lambda x,y: 'equal' if x == y else 'no'))
 print('#'*10, '7.匿名函数', 'start' if 0 else 'end', '#'*10)
 
-# 8.装饰器
+### 8.装饰器
 import functools
 # 在代码运行期间动态增加功能的方式，称之为“装饰器”(ecorator)。本质上，decorator就是一个返回函数的高阶函数。
 print('#'*10, '8.装饰器', 'start' if 1 else 'end', '#'*10)
@@ -289,9 +291,9 @@ def log(func):
 def now():
     print('20190724-152535')
 
-print(now.__name__) #测试@functools.wraps(func)
+print('now.__name__', now.__name__) #测试@functools.wraps(func)
 now() #注意观察print顺序
-print(now.__name__)
+print('now.__name__', now.__name__)
 
 # e.g. 2
 # 如果decorator本身需要传入参数，那就需要编写一个返回decorator的高阶函数，写出来会更复杂。比如，要自定义log的文本：
@@ -309,9 +311,9 @@ def log2(text):
 def now2():
     print('20190724-165516')
 
-print(now2.__name__)
+print('now2.__name__', now2.__name__)
 now2()
-print(now2.__name__)
+print('now2.__name__', now2.__name__)
 
 # e.g. 3
 # 这种情况下首先 E(str) = C(E)(str)，然后由于C = A(C)，还有 E(str) = A(C)(E)(str)。
@@ -320,6 +322,7 @@ print(now2.__name__)
 
 def A(funC):
     def decorated_C(funE):
+        @functools.wraps(funE)
         def decorated_E_by_CA(*args, **kwargs):
             out = funC(funE)(*args, **kwargs)
             return out +' > decorated by A'
@@ -336,19 +339,21 @@ def C(funE):
 def E(str):
     return str
 
-print(E.__name__)
+print('E.__name__', E.__name__)
 print(E('E string is '))
-print(E.__name__)
+print('E.__name__', E.__name__)
 
 # e.g. 4
 # 这种情况下，有 E2(str) = A2(C2(E2))(str)。首先装饰器 C2 装饰函数 E2，返回一个被 C2 装饰过的函数，
 # 然后装饰器 A2 再装饰这个被 C2 装饰过的函数。与第一种情况的区别是，这里的装饰器 A2 装饰的是一个函数，而不是一个装饰器。
 def A2(funE2_decorated_by_C2):
+    @functools.wraps(funE2_decorated_by_C2)
     def redecorated_E2(str):
         return funE2_decorated_by_C2(str)+' > redecorated by A2'
     return redecorated_E2
 
 def C2(funE2):
+    @functools.wraps(funE2)
     def decorated_E2(str):
         return funE2(str)+' > decorated by C2'
     return decorated_E2
@@ -358,8 +363,34 @@ def C2(funE2):
 def E2(str):
     return str
 
-print(E2.__name__)
+print('E2.__name__', E2.__name__)
 print(E2('E2 string is ')) #等价于print(A2(C2(E2))('E2 string is '))，此时E2不加装饰器
-print(E2.__name__)
+print('E2.__name__', E2.__name__)
+
+# 练习：请设计一个decorator，它可作用于任何函数上，并打印该函数的执行时间
+import time
+def metric(fn):
+    @functools.wraps(fn)
+    def wrapper(*args, **kw):
+        t1 = time.clock()
+        r = fn(*args, **kw)
+        t2 = time.clock()
+        print('%s executed in %s ms' % (fn.__name__, t2-t1))
+        return r
+    return wrapper
+
+@metric
+def fast(x, y):
+    time.sleep(0.0012)
+    return x + y
+
+@metric
+def slow(x, y, z):
+    time.sleep(0.1234)
+    return x * y * z
+
+f = fast(11, 22)
+s = slow(11, 22, 33)
+print(fast.__name__, f, slow.__name__, s)
 
 print('#'*10, '8.装饰器', 'start' if 0 else 'end', '#'*10)
