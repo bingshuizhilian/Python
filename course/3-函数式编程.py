@@ -12,6 +12,8 @@ def add(a, b, f):
 print(add(-6, 9, abs))
 print('#'*10, '1.传入函数/高阶函数', 'start' if 0 else 'end', '#'*10)
 
+
+
 ### 2.map
 # map()将传入的函数依次作用到序列的每个元素，并把结果作为新的Iterator返回。
 print('#'*10, '2.map', 'start' if 1 else 'end', '#'*10)
@@ -35,6 +37,8 @@ L2 = ['adam', 'LISA', 'barT']
 L3 = list(map(normalize, L2))
 print(L3)
 print('#'*10, '2.map', 'start' if 0 else 'end', '#'*10)
+
+
 
 ### 3.reduce
 # reduce()把一个函数作用在一个序列[x1, x2, x3, ...]上，这个函数必须接收两个参数，reduce把结果继续和序列的下一个元素做累积计算。
@@ -78,6 +82,8 @@ def str2float(s):
     # return reduce(lambda x,y:x*10+y, list(map(lambda i:d[i], l[0]))) + reduce(lambda x,y:(x*0.1+y), list(map(lambda i:d[i], l[1][::-1])))*0.1
 print('str2float(\'123.456789\') =', str2float('123.456789'))
 print('#'*10, '3.reduce', 'start' if 0 else 'end', '#'*10)
+
+
 
 ### 4.filter
 # filter()把传入的函数依次作用于每个元素，然后根据返回值是True还是False决定保留还是丢弃该元素。
@@ -126,6 +132,8 @@ print('10~60:', list(output), list(output2))
 
 print('#'*10, '4.filter', 'start' if 0 else 'end', '#'*10)
 
+
+
 ### 5.sorted
 # 参数key指定的函数将作用于list的每一个元素上(不改变原始值)，并根据key函数返回的结果进行排序。
 print('#'*10, '5.sorted', 'start' if 1 else 'end', '#'*10)
@@ -140,6 +148,8 @@ def by_name(t): return t[0]
 def by_score(t): return -t[1]
 print(sorted(L5, key = by_name), sorted(L5, key = by_score))
 print('#'*10, '5.sorted', 'start' if 0 else 'end', '#'*10)
+
+
 
 ### 6.返回函数
 ''' 复习函数参数开始
@@ -261,6 +271,8 @@ counterB = createCounter3()
 print(counterB(), counterB(), counterB(), counterB())
 print('#'*10, '6.返回函数', 'start' if 0 else 'end', '#'*10)
 
+
+
 ### 7.匿名函数
 # 关键字lambda表示匿名函数。匿名函数有个限制，就是只能有一个表达式，不用写return，返回值就是该表达式的结果。
 print('#'*10, '7.匿名函数', 'start' if 1 else 'end', '#'*10)
@@ -269,6 +281,8 @@ print(list(filter(lambda n: n % 2 == 1, range(1, 20))))
 def g_lambda(a, b, f): return f(a, b)
 print(g_lambda(2, 2, lambda x,y: 'equal' if x == y else 'no'))
 print('#'*10, '7.匿名函数', 'start' if 0 else 'end', '#'*10)
+
+
 
 ### 8.装饰器
 import functools
@@ -372,10 +386,10 @@ import time
 def metric(fn):
     @functools.wraps(fn)
     def wrapper(*args, **kw):
-        t1 = time.clock()
+        t1 = time.time()
         r = fn(*args, **kw)
-        t2 = time.clock()
-        print('%s executed in %s ms' % (fn.__name__, t2-t1))
+        t2 = time.time()
+        print('%s executed in %s ms' % (fn.__name__, (t2-t1)*1000))
         return r
     return wrapper
 
@@ -394,3 +408,28 @@ s = slow(11, 22, 33)
 print(fast.__name__, f, slow.__name__, s)
 
 print('#'*10, '8.装饰器', 'start' if 0 else 'end', '#'*10)
+
+
+
+### 9.偏函数(Partial function)
+# functools.partial的作用就是，把一个函数的某些参数给固定住（也就是设置默认值），返回一个新的函数，调用这个新函数会更简单。
+# 如 int2 = functools.partial(int, base=2) 等价于 int(x, base=2)
+# 注意上面的新的int2函数，仅仅是把base参数重新设定默认值为2，但也可以在函数调用时传入其他值，如int2(x, base=10)
+# 创建偏函数时，可以接收函数对象、*args和**kw这3个参数，如 kw = { 'base': 2 }; int('10010', **kw)
+# 再如 max2 = functools.partial(max, 10)，实际上会把10作为*args的一部分自动加到左边，即args = (10, 5, 6, 7); max(*args)
+print('#'*10, '9.偏函数', 'start' if 1 else 'end', '#'*10)
+# partialFakeCode仅描述实现的思路，不具有实际使用意义，可以帮助理解max2为何参数10会放在*args的左边
+def partialFakeCode(func, *args, **keywords):
+    def newfunc(*fargs, **fkeywords):
+        newkeywords = keywords.copy()
+        newkeywords.update(fkeywords)
+        return func(*args, *fargs, **newkeywords)
+    newfunc.func = func
+    newfunc.args = args
+    newfunc.keywords = keywords
+    return newfunc
+
+int2 = functools.partial(int, base = 2)
+print(int2('1011010'))
+
+print('#'*10, '9.偏函数', 'start' if 0 else 'end', '#'*10)
