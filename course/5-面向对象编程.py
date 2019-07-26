@@ -129,9 +129,66 @@ print('#'*10, '4.访问限制', 'start' if 0 else 'end', '#'*10)
 
 
 ### 5.继承和多态
+# 继承最大的好处是子类获得了父类的全部功能。
+# 当子类和父类都存在相同的方法时，子类覆盖了父类的方法，在代码运行的时候，总是会调用子类的方法。这就是继承的另一个好处：多态。
+# “开闭”原则，对扩展开放：允许新增子类；对修改封闭：不需要修改依赖该类型的函数。 
+# 把不同的子类对象都当作父类来看，可以屏蔽不同子类对象之间的差异，写出通用的代码，做出通用的编程，以适应需求的不断变化。
+print('#'*10, '5.继承和多态', 'start' if 1 else 'end', '#'*10)
+class Animal:
+    unionParam = 50
+    def run(self):
+        print('Animal is running...')
 
+class Dog(Animal):
+    def run(self):
+        print('Dog is running...')
 
-# 观察是否写了继承自object的区别，实际在python3中，类均默认继承自object。
+class Cat(Animal):
+    unionParam = 90
+    def run2(self):
+        print('Animal is running...')
+
+class Fox(Animal):
+    unionParam = -26
+    def __init__(self, param):
+        self.unionParam = param
+    
+    def run(self):
+        print('Wolf is running...')
+
+class FoxSon(Fox):pass
+
+def run_test(animal):
+    animal.run()
+
+base = Animal()
+dog = Dog()
+cat = Cat()
+
+run_test(base)
+run_test(dog)
+run_test(cat)
+
+print(isinstance(cat, Animal), isinstance(cat, Cat))
+print(cat.unionParam)
+cat.unionParam = 10
+dog.unionParam = 20
+print(base.unionParam, cat.unionParam, dog.unionParam)
+
+fox = Fox(31)
+print(fox.unionParam)
+foxson = FoxSon(45)
+print(foxson.unionParam)
+
+# 静态语言 vs 动态语言
+'''
+对于静态语言（例如Java）来说，如果需要传入Animal类型，则传入的对象必须是Animal类型或者它的子类，否则，将无法调用run()方法。
+对于Python这样的动态语言来说，则不一定需要传入Animal类型。我们只需要保证传入的对象有一个run()方法就可以了，这就是动态语言
+的“鸭子类型”，它并不要求严格的继承体系，一个对象只要“看起来像鸭子，走起路来像鸭子”，那它就可以被看做是鸭子。动态语言的鸭子
+类型特点决定了继承不像静态语言那样是必须的。
+'''
+
+# 题外话：观察是否写了继承自object的区别，实际在python3中，类均默认继承自object。
 class aa:pass
 class bb():pass
 class cc(object):pass
@@ -139,3 +196,14 @@ print('*'*20, dir(Student2), '*'*20)
 print('*'*20, dir(aa), '*'*20)
 print('*'*20, dir(bb), '*'*20)
 print('*'*20, dir(cc), '*'*20)
+print('#'*10, '5.继承和多态', 'start' if 0 else 'end', '#'*10)
+
+
+
+### 6.获取对象信息
+print('#'*10, '6.获取对象信息', 'start' if 1 else 'end', '#'*10)
+
+
+
+
+print('#'*10, '6.获取对象信息', 'start' if 0 else 'end', '#'*10)
