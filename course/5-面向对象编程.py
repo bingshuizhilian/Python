@@ -16,6 +16,8 @@ import sys
 # 面向对象的设计思想是抽象出Class，根据Class创建Instance；数据封装、继承和多态是面向对象的三大特点。
 print('#'*10, '1.面向对象编程', 'start' if 1 else 'end', '#'*10)
 class Student(object):
+    __slots__ = ('name', 'score', 'age')
+
     def __init__(self, name, score):
         self.name = name
         self.score = score
@@ -202,8 +204,48 @@ print('#'*10, '5.继承和多态', 'start' if 0 else 'end', '#'*10)
 
 ### 6.获取对象信息
 print('#'*10, '6.获取对象信息', 'start' if 1 else 'end', '#'*10)
+# 使用type()
+# 基本类型都可以用type()判断。
+print(type(foxson), type('123'), 123 == type(int), type(run_test), type(max))
+print(type(lambda x:x), type((x for x in range(9))))
 
+# 使用isinstance()
+# 对于class的继承关系来说，使用type()就很不方便。我们要判断class的类型，可以使用isinstance()函数，
+# isinstance()判断的是一个对象是否是该类型本身，或者位于该类型的父继承链上。
+# 总是优先使用isinstance()判断类型，可以将指定类型及其子类“一网打尽”。
+print(isinstance(dog, Dog), isinstance(dog, Animal), isinstance(base, Dog))
+# isinstance()还可以判断一个变量是否是某些类型中的一种
+print(isinstance([1,2], (list, tuple)))
+print(isinstance((1,2), (list, tuple)))
 
+# 使用dir()
+# 如果要获得一个对象的所有属性和方法，可以使用dir()函数，它返回一个包含字符串的list。
+print(dir('abc'), dir(str) == dir('abc'))
 
+# 使用getattr()、setattr()以及hasattr()操作一个对象的状态
+# 要注意的是，只有在不知道对象信息的时候，才会去获取对象信息。
+print(hasattr(base, 'run'), hasattr(dog, 'favourite'))
+print(getattr(base, 'run'))
+setattr(dog, 'favourite', 'bone')
+if hasattr(dog, 'favourite'):
+    print(getattr(dog, 'favourite'))
 
 print('#'*10, '6.获取对象信息', 'start' if 0 else 'end', '#'*10)
+
+
+
+### 7.实例属性和类属性
+'''
+由于Python是动态语言，根据类创建的实例可以任意绑定属性，给实例绑定属性的方法是通过实例变量，或者通过self变量。
+如果类本身需要绑定一个属性，可以直接在class中定义属性，这种属性是类属性，归类所有，这个属性虽然归类所有，但类
+的所有实例都可以访问到。
+'''
+print('#'*10, '7.实例属性和类属性', 'start' if 1 else 'end', '#'*10)
+
+print(base.unionParam, Animal.unionParam)
+base.unionParam = 'override unionParam'
+print(base.unionParam, Animal.unionParam)
+# 可以看出，在编写程序的时候，千万不要对实例属性和类属性使用相同的名字，因为相同名称的实例属性将屏蔽
+# 掉类属性，但是当删除实例属性后，再使用相同的名称，访问到的将是类属性。
+
+print('#'*10, '7.实例属性和类属性', 'start' if 0 else 'end', '#'*10)
