@@ -66,3 +66,12 @@ gs2 = GraduatedStudent2('lucy')
 gs2.print_name()
 # gs2.age = 18 # 不能运行
 print('#'*10, '2.使用__slots__', 'start' if 0 else 'end', '#'*10)
+
+
+
+### 3.使用@property
+print('#'*10, '3.使用@property', 'start' if 1 else 'end', '#'*10)
+
+
+
+print('#'*10, '3.使用@property', 'start' if 0 else 'end', '#'*10)
