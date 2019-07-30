@@ -186,9 +186,117 @@ print('#'*10, '4.多重继承', 'start' if 0 else 'end', '#'*10)
 
 
 ### 5.定制类
+# Python的class中有许多像__slots__这样有特殊用途的函数，可以实现定制类。
 print('#'*10, '5.定制类', 'start' if 1 else 'end', '#'*10)
+class CustomizedDemo(object):
+    def __init__(self, name):
+        self.__name = name
 
+    # __str__()返回用户看到的字符串
+    def __str__(self):
+        return 'CustomizedDemo object (name: %s)' % self.__name
 
+    # __repr__()返回程序开发者看到的字符串，为调试服务
+    __repr__ = __str__
 
+cdobj = CustomizedDemo("cdobj")
+print(cdobj, CustomizedDemo("cdobj2"))
+
+'''
+如果一个类想被用于for ... in循环，类似list或tuple那样，就必须实现一个__iter__()方法，
+该方法返回一个迭代对象，然后，Python的for循环就会不断调用该迭代对象的__next__()方法
+拿到循环的下一个值，直到遇到StopIteration错误时退出循环。
+'''
+class Fib(object):
+    def __init__(self):
+        self.a, self.b = 0, 1
+
+    def __iter__(self):
+        return self  # 实例本身就是迭代对象，故返回自己
+
+    def __next__(self):
+        self.a, self.b = self.b, self.a + self.b
+        if self.a > 100:  # 退出循环的条件
+            raise StopIteration()
+        return self.a
+
+    # 要像list那样按照下标取出元素，需要实现__getitem__()方法
+    def __getitem__(self, n):
+        print('Fib __getitem__ param n =', n)
+        a, b = 1, 1
+
+        if isinstance(n, int):
+            for x in range(n):
+                a, b = b, a + b
+            return a
+
+        if isinstance(n, slice):
+            start = n.start
+            stop = n.stop
+            # step = n.step  # step是步进值，此外，切片slice的负值亦未处理
+            if start is None:
+                start = 0
+            a, b = 1, 1
+            L = []
+            for x in range(stop):
+                if x >= start:
+                    L.append(a)
+                a, b = b, a + b
+            return L
+
+for x in Fib():
+    print(x)
+
+print(Fib()[5], Fib()[100], Fib()[3:5], Fib()[:5])
+
+''' ↑ 关于__setitem__和__delitem__：
+如果把对象看成dict，__getitem__()的参数也可能是一个可以作key的object，例如str。
+与之对应的是__setitem__()方法，把对象视作list或dict来对集合赋值。最后，还有一个
+__delitem__()方法，用于删除某个元素。
+'''
+
+class CustomizedDemo2(object):
+    def __init__(self, name):
+        self.__name = name
+
+    # 调用类的方法或属性时，如果不存在会报错。要避免这个错误，除了可以加上一个属性外，
+    # Python还有另一个机制，那就是写一个__getattr__()方法，动态返回一个属性。
+    def __getattr__(self, attr):
+        if 'age' == attr:
+            return 20  # 返回属性
+
+        if 'score' == attr:
+            return lambda :25  # 返回方法
+
+        raise AttributeError('CustomizedDemo2 object has no attribute \'%s\'' % attr)
+
+    # 任何类，只需要定义一个__call__()方法，就可以直接对实例进行调用。
+    def __call__(self):
+        print('CustomizedDemo2 object name is \'%s\'' % self.__name)
+
+'''
+注意，只有在没有找到属性的情况下，才调用__getattr__，已有的属性不会在__getattr__中查找。
+__getattr__默认返回None，要让class只响应特定的几个属性，就要按照约定，抛出AttributeError异常。
+'''
+cd2obj = CustomizedDemo2('cd2obj')
+print(cd2obj.age, cd2obj.score, cd2obj.score())
+# print(cd2obj.year)  # 当__getattribute__有raise AttributeError时会抛出异常；否则__getattr__默认返回None
+print(callable(cd2obj))
+cd2obj()
+print(dir(cd2obj))
 
 print('#'*10, '5.定制类', 'start' if 0 else 'end', '#'*10)
+
+
+
+### 6.使用枚举类
+# 当我们需要定义常量时，好的方法是为这样的枚举类型定义一个class类型，然后，
+# 每个常量都是class的一个唯一实例，Python提供了Enum类来实现这个功能。
+print('#'*10, '6.使用枚举类', 'start' if 1 else 'end', '#'*10)
+from enum import Enum
+
+Month = Enum('Month', ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'))
+
+print(Month)
+
+print('#'*10, '6.使用枚举类', 'start' if 0 else 'end', '#'*10)
