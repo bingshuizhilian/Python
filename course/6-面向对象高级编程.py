@@ -293,10 +293,98 @@ print('#'*10, '5.定制类', 'start' if 0 else 'end', '#'*10)
 # 当我们需要定义常量时，好的方法是为这样的枚举类型定义一个class类型，然后，
 # 每个常量都是class的一个唯一实例，Python提供了Enum类来实现这个功能。
 print('#'*10, '6.使用枚举类', 'start' if 1 else 'end', '#'*10)
-from enum import Enum
+from enum import Enum, unique
 
+# value属性则是自动赋给成员的int常量，默认从1开始计数。
 Month = Enum('Month', ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'))
 
-print(Month)
+for name, member in Month.__members__.items():
+    print(name, '=>', member, ',', member.value)
+
+print(Month.Jan, Month['Feb'], Month.Mar.value)
+
+# 如果需要更精确地控制枚举类型，可以从Enum派生出自定义类
+# @unique装饰器可以帮助我们检查保证没有重复值
+@unique
+class Weekday(Enum):
+    Sun = 0
+    Mon = 1
+    Tue = 2
+    Wed = 3
+    Thu = 4
+    Fri = 5
+    Sat = 6
+
+for name, member in Weekday.__members__.items():
+    print(name, '=>', member, ',', member.value)
+
+day = Weekday.Mon
+print(type(day), day, day.value)
+print(Weekday.Tue, Weekday['Sun'], Weekday.Thu.value)
+print(day == Weekday.Mon, day == Weekday(1), Weekday(5))
+# Weekday(7)  # 不能运行，无此值
+
+# ↑ 既可以用成员名称引用枚举常量，又可以直接根据value的值获得枚举常量。
+# Enum可以把一组相关常量定义在一个class中，且class不可变，而且成员可以直接比较。
 
 print('#'*10, '6.使用枚举类', 'start' if 0 else 'end', '#'*10)
+
+
+
+### 7.使用元类
+print('#'*10, '7.使用元类', 'start' if 1 else 'end', '#'*10)
+'''
+1.class的定义是运行时动态创建的，而创建class的方法就是使用type()函数；通过type()函数
+  创建的类和直接写class是完全一样的，因为Python解释器遇到class定义时，仅仅是扫描一下class
+  定义的语法，然后调用type()函数创建出class；动态语言本身支持运行期动态创建类。
+2.type()函数既可以返回一个对象的类型，又可以创建出新的类型。
+3.要创建一个class对象，type()函数依次传入3个参数：
+(1)class的名称；
+(2)继承的父类集合，注意Python支持多重继承，如果只有一个父类，别忘了tuple的单元素写法；
+(3)class的方法名称与函数绑定。
+'''
+def TypeBindindFunctionDemo(self, name = 'world'):
+    print('Hello, %s' % name)
+
+Hello = type('Hello', (object, ), dict(hello = TypeBindindFunctionDemo))
+h = Hello()
+h.hello()
+print(type(Hello), type(h))
+
+'''
+1.除了使用type()动态创建类以外，要控制类的创建行为，还可以使用metaclass。
+  metaclass，直译为元类，简单的解释就是：先定义metaclass，就可以创建类，最后创建实例。
+  metaclass允许创建类或者修改类，可以把类看成是metaclass创建出来的“实例”。
+'''
+# 按照默认习惯，metaclass的类名总是以Metaclass结尾，以便清楚地表示这是一个metaclass
+class ListMetaclass(type):
+    def __new__(cls, name, bases, attrs):
+        attrs['add'] = lambda self, value: self.append(value)
+        return type.__new__(cls, name, bases, attrs)
+
+'''
+1.有了ListMetaclass，在定义类的时候还要指示使用ListMetaclass来定制类，传入关键字参数metaclass。
+2.当传入关键字参数metaclass时，魔术就生效了，它指示Python解释器在创建MyList时，要通过ListMetaclass.__new__()
+  来创建，在此，我们可以修改类的定义，比如，加上新的方法，然后，返回修改后的定义。
+3.__new__()方法接收到的参数依次是：当前准备创建的类的对象；类的名字；类继承的父类集合；类的方法集合。
+'''
+class MyList(list, metaclass = ListMetaclass):
+    pass
+
+L = MyList()
+L.add(1)
+print(L)
+L2 = []
+# L2.add(2)  # 不能运行
+print(L2)
+
+'''
+《通过metaclass修改类定义的例子：ORM》
+ORM全称“Object Relational Mapping”，即对象-关系映射，就是把关系数据库的一行映射为一个对象，也就是一个类对应一个表，
+这样，写代码更简单，不用直接操作SQL语句。要编写一个ORM框架，所有的类都只能动态定义，因为只有使用者才能根据表的结构定
+义出对应的类来。
+'''
+# 编写底层模块的第一步，先把调用接口写出来。
+
+
+print('#'*10, '7.使用元类', 'start' if 0 else 'end', '#'*10)
