@@ -152,8 +152,75 @@ print('#'*10, '1.错误处理', 'start' if 0 else 'end', '#'*10)
 
 ### 2.调试
 print('#'*10, '2.调试', 'start' if 1 else 'end', '#'*10)
+# 方法一：print()
+# 用print()把可能有问题的变量打印出来，简单直接粗暴有效，用print()最大的坏处是将来还得删掉它，想想程序里到处都是print()，
+# 运行结果也会包含很多垃圾信息。
 
+# 方法二：assert，即断言
+# 凡是用print()来辅助查看的地方，都可以用断言(assert)来替代。
+def foo3(s):
+    n = int(s)
+    assert n != 0, 'n is zero!'
+    return 10 / n
 
+# foo3('0')
+'''
+assert的意思是，表达式n != 0应该是True，否则，根据程序运行的逻辑，后面的代码肯定会出错，
+如果断言失败，assert语句本身就会抛出AssertionError。
 
+程序中如果到处充斥着assert，和print()相比也好不到哪去。不过，启动Python解释器时可以用-O参数
+来关闭assert：$ python -O xxx.py。断言的开关“-O”是英文大写字母O，不是数字0。关闭后，可以把
+所有的assert语句当成pass来看。
+'''
+
+# 方法三：logging
+# 和assert比，logging不会抛出错误，而且可以输出到文件
+# logging.basicConfig(filename=os.path.dirname(__file__) + '/my2.log', level=logging.ERROR, format=LOG_FORMAT, datefmt=DATE_FORMAT)
+s_logging = '0'
+n_logging = int(s_logging)
+logging.info('n_logging = %d' % n_logging)
+logging.error('n_logging = %d ..' % n_logging)
+logging.exception('n_logging = %d ...' % n_logging)
+# print(10 / n_logging)
+
+'''
+这就是logging的好处，它允许你指定记录信息的级别，有debug，info，warning，error等几个级别，
+当我们指定level=INFO时，logging.debug就不起作用了。同理，指定level=WARNING后，debug和info
+就不起作用了。这样一来，可以放心地输出不同级别的信息，也不用删除，最后统一控制输出哪个级别的信息。
+
+logging的另一个好处是通过简单的配置，一条语句可以同时输出到不同的地方，比如console和文件。
+'''
+
+# 方法四：pdb
+'''
+启动Python的调试器pdb: $ python -m pdb xxx.py，让程序以单步方式运行，可以随时查看运行状态。
+
+以参数-m pdb启动后，pdb定位到下一步要执行的代码，输入命令l来查看代码、输入命令n可以单步执行代码、
+任何时候都可以输入命令p 变量名来查看变量、输入命令q结束调试，退出程序。这种通过pdb在命令行调试的
+方法理论上是万能的，但是太麻烦。
+'''
+
+# 方法五：pdb.set_trace()
+# 这个方法也是用pdb，但是不需要单步执行，我们只需要import pdb，然后，在可能出错的地方放一个
+# pdb.set_trace()，就可以设置一个断点，运行代码，程序会自动在pdb.set_trace()暂停并进入pdb
+# 调试环境，可以用命令p查看变量，或者用命令c继续运行，这个方式比直接启动pdb单步调试效率要高
+# 很多，但也高不到哪去。
+import pdb
+
+s_logging2 = '0'
+n_logging2 = int(s_logging2)
+logging.info('n_logging2 = %d' % n_logging2)
+logging.error('n_logging2 = %d ..' % n_logging2)
+logging.exception('n_logging2 = %d ...' % n_logging2)
+# pdb.set_trace()
+# print(10 / n_logging2)
+
+# 方法六：IDE
+'''
+如果要比较爽地设置断点、单步执行，就需要一个支持调试功能的IDE。目前比较好的Python IDE有：
+[Visual Studio Code + Python插件]、PyCharm、[Eclipse + pydev插件]。
+
+虽然用IDE调试起来比较方便，但是最后会发现，logging才是终极武器。
+'''
 print('#'*10, '2.调试', 'start' if 0 else 'end', '#'*10)
 
