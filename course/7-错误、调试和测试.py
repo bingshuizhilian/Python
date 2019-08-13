@@ -228,10 +228,29 @@ print('#'*10, '2.调试', 'start' if 0 else 'end', '#'*10)
 
 ### 3.单元测试
 '''
-单元测试可以有效地测试某个程序模块的行为，是未来重构代码的信心保证。
-单元测试的测试用例要覆盖常用的输入组合、边界条件和异常。
-单元测试代码要非常简单，如果测试代码太复杂，那么测试代码本身就可能有bug。
-单元测试通过了并不意味着程序就没有bug了，但是不通过程序肯定有bug。
+1.
+听说过“测试驱动开发”（TDD：Test-Driven Development），单元测试就不陌生。以测试为驱动的
+开发模式最大的好处就是确保一个程序模块的行为符合我们设计的测试用例。在将来修改的时候，可以
+极大程度地保证该模块行为仍然是正确的。
+
+2.
+(1)单元测试可以有效地测试某个程序模块的行为，是未来重构代码的信心保证;
+(2)单元测试的测试用例要覆盖常用的输入组合、边界条件和异常;
+(3)单元测试代码要非常简单，如果测试代码太复杂，那么测试代码本身就可能有bug;
+(4)单元测试通过了并不意味着程序就没有bug了，但是不通过程序肯定有bug。
+
+3.
+(1)为了编写单元测试，需要引入Python自带的unittest模块。编写单元测试时，需要编写一个测试类，
+   从unittest.TestCase继承。
+(2)以test开头的方法就是测试方法，不以test开头的方法不被认为是测试方法，测试的时候不会被执行。
+(3)对每一类测试都需要编写一个test_xxx()方法。由于unittest.TestCase提供了很多内置的条件判断，
+   我们只需要调用这些方法就可以断言输出是否是我们所期望的。最常用的断言就是assertEqual()。
+(4)一旦编写好单元测试，我们就可以运行单元测试。最简单的运行方式是在xxx.py的最后加上代码：
+   if __name__ == '__main__': unittest.main()；或者在命令行通过参数-m unittest直接运行单
+   元测试：$ python -m unittest mydict_test，这是推荐的做法，因为这样可以一次批量运行很多
+   单元测试，并且，有很多工具可以自动来运行这些单元测试。
+(5)可以在单元测试中编写两个特殊的setUp()和tearDown()方法。这两个方法会分别在每调用一个测试方法
+   的前后分别被执行。
 '''
 print('#'*10, '3.单元测试', 'start' if 1 else 'end', '#'*10)
 
@@ -252,6 +271,11 @@ class Student(object):
         return 'C'
 
 class TestStudent(unittest.TestCase):
+    def setUp(self):
+        print('setUp')
+
+    def tearDown(self):
+        print('tearDown')
 
     def test_80_to_100(self):
         s1 = Student('Bart', 80)
@@ -279,8 +303,25 @@ class TestStudent(unittest.TestCase):
         with self.assertRaises(ValueError):
             s2.get_grade()
 
+    def test_if_print_run(self): # testif_print_run # if_print_run
+        print('if_print_run...')
+
 if __name__ == '__main__':
     unittest.main()
 
 print('#'*10, '3.单元测试', 'start' if 0 else 'end', '#'*10)
+
+
+
+### 4.文档测试
+'''
+1.Python内置的“文档测试”（doctest）模块可以直接提取注释中的代码并执行测试。
+2.doctest严格按照Python交互式命令行的输入和输出来判断测试结果是否正确。只有
+  测试异常的时候，可以用...表示中间一大段烦人的输出。
+'''
+print('#'*10, '4.文档测试', 'start' if 0 else 'end', '#'*10)
+
+
+
+print('#'*10, '4.文档测试', 'start' if 0 else 'end', '#'*10)
 
