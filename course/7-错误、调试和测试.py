@@ -307,7 +307,7 @@ class TestStudent(unittest.TestCase):
         print('if_print_run...')
 
 if __name__ == '__main__':
-    unittest.main()
+    pass # unittest.main()
 
 print('#'*10, '3.单元测试', 'start' if 0 else 'end', '#'*10)
 
@@ -318,10 +318,34 @@ print('#'*10, '3.单元测试', 'start' if 0 else 'end', '#'*10)
 1.Python内置的“文档测试”（doctest）模块可以直接提取注释中的代码并执行测试。
 2.doctest严格按照Python交互式命令行的输入和输出来判断测试结果是否正确。只有
   测试异常的时候，可以用...表示中间一大段烦人的输出。
+3.注意文档测试时输入 >>> 的后面要接一个空格： >>> l = [] 才可以。
 '''
 print('#'*10, '4.文档测试', 'start' if 0 else 'end', '#'*10)
 
+import doctest
 
+class Student2(object):
+    '''
+    >>> s1 = Student2('lily', 80)
+    >>> s1.get_grade()
+    'A'
+    >>> s1.score
+    81
+    '''
+    def __init__(self, name, score):
+        self.name = name
+        self.score = score
+    def get_grade(self):
+        if self.score < 0 or self.score > 100:
+            raise ValueError
+        if self.score >= 80:
+            return 'A'
+        if self.score >= 60:
+            return 'B'
+        
+        return 'C'
+
+if __name__ == '__main__':
+    doctest.testmod()
 
 print('#'*10, '4.文档测试', 'start' if 0 else 'end', '#'*10)
-
