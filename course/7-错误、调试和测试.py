@@ -319,6 +319,8 @@ print('#'*10, '3.单元测试', 'start' if 0 else 'end', '#'*10)
 2.doctest严格按照Python交互式命令行的输入和输出来判断测试结果是否正确。只有
   测试异常的时候，可以用...表示中间一大段烦人的输出。
 3.注意文档测试时输入 >>> 的后面要接一个空格： >>> l = [] 才可以。
+4.doctest非常有用，不但可以用来测试，还可以直接作为示例代码。通过某些文档生成工具，
+  就可以自动把包含doctest的注释提取出来。用户看文档的时候，同时也看到了doctest。
 '''
 print('#'*10, '4.文档测试', 'start' if 0 else 'end', '#'*10)
 
@@ -330,7 +332,12 @@ class Student2(object):
     >>> s1.get_grade()
     'A'
     >>> s1.score
-    81
+    80
+    >>> s2 = Student2('lily', -2)
+    >>> s2.get_grade()
+    Traceback (most recent call last):
+    ...
+    ValueError
     '''
     def __init__(self, name, score):
         self.name = name
