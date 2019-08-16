@@ -89,7 +89,8 @@ StringIO就是在内存中创建的file-like Object，常用作临时缓冲。
 # 前面所述默认都是读取文本文件，并且是UTF-8编码的文本文件。要读取二进制文件，比如图片、
 # 视频等等，用'rb'模式打开文件即可。
 with open('0-连接.py', 'rb') as f6:
-    print(f6.readline())
+    f6_readline = f6.readline()
+    print(f6_readline)
     print('f6 read complete')
 
 '''字符编码'''
@@ -127,10 +128,103 @@ print('#'*10, '1.文件读写', 'start' if 0 else 'end', '#'*10)
 
 
 ### 2.StringIO和BytesIO
+# StringIO和BytesIO是在内存中操作str和bytes的方法，使得和读写文件具有一致的接口。
 print('#'*10, '2.StringIO和BytesIO', 'start' if 1 else 'end', '#'*10)
 
+from io import StringIO
+f9 = StringIO()
+f9.write('hello world')
+f9.write('\nhello world2')
+print(f9.getvalue()) # getvalue()方法用于获得写入后的str
 
+# 要读取StringIO，可以用一个str初始化StringIO，然后，像读文件一样读取
+f10 = StringIO('Hello!\nHi!\nGoodbye!')
+while True:
+    s = f10.readline()
+    if s == '':
+        break
+    print(s.strip())
+
+# StringIO操作的只能是str，如果要操作二进制数据，就需要使用BytesIO，BytesIO实现了在内存中读写bytes。
+from io import BytesIO
+
+f11 = BytesIO()
+f11.write('中华人民共和国'.encode('utf-8'))
+f11.write(b'welcome')
+print(f11.getvalue())
+
+# 注意，写入的不是str，而是经过UTF-8编码的bytes。和StringIO类似，可以用一个bytes初始化BytesIO，然后，
+# 像读文件一样读取即可。
+f12 = BytesIO(b'\xe4\xb8\xad\xe6\x96\x87')
+print(f12.read())
+print(f12.getvalue())
+print(f12.getbuffer())
 
 print('#'*10, '2.StringIO和BytesIO', 'start' if 0 else 'end', '#'*10)
 
+
+
+### 3.操作文件和目录
+# Python的os模块封装了操作系统的目录和文件操作，要注意这些函数有的在os模块中，有的在os.path模块中。
+print('#'*10, '3.操作文件和目录', 'start' if 1 else 'end', '#'*10)
+
+import os
+
+print(os.name)
+print(os.environ)
+print(os.environ.get('PATH'), '\n', os.environ.get('PATH') == os.getenv('PATH'))
+
+# 操作文件和目录的函数一部分放在os模块中，一部分放在os.path模块中，查看、创建和删除目录示例如下。
+# 查看当前目录的绝对路径
+print(os.path.abspath('.'))
+# 在某个目录下创建一个新目录，首先把新目录的完整路径表示出来
+testdir = os.path.join(os.path.abspath('.'), 'testdir')
+print(testdir)
+# 然后创建一个目录
+os.mkdir(testdir)
+# 删掉一个目录
+os.rmdir(testdir)
+
+r'''
+把两个路径合成一个时，不要直接拼字符串，而要通过os.path.join()函数，这样可以正确处理不同操作系统的
+路径分隔符。在Linux/Unix/Mac下，os.path.join()返回这样的字符串：part-1/part-2；而Windows下会返回
+这样的字符串：part-1\part-2。
+
+同样的道理，要拆分路径时，也不要直接去拆字符串，而要通过os.path.split()函数，这样可以把一个路径拆分
+为两部分，后一部分总是最后级别的目录或文件名。
+'''
+testdir2, testfilename = os.path.split('e:\\GITHUB\\Python\\course')
+print(testdir2)
+print(testfilename)
+
+testdir3, testfilename2 = os.path.split('e:\\GITHUB\\Python\\course\\0-连接.py')
+print(testdir3)
+print(testfilename2)
+
+# os.path.splitext()可以直接得到文件扩展名，很多时候非常方便
+testdir4, testfilename3 = os.path.splitext('e:\\GITHUB\\Python\\course\\0-连接.py')
+print(testdir4)
+print(testfilename3)
+
+# 这些合并、拆分路径的函数并不要求目录和文件要真实存在，它们只对字符串进行操作。
+# 创建文件
+with open('testfile.txt', 'w+', encoding = 'utf-8') as f13:
+    f13.write('This is a test file.')
+# 对文件重命名
+os.rename('testfile.txt', 'testfile.py')
+# 删除文件
+os.remove('testfile.py')
+# os模块中不存在复制文件的函数，幸运的是shutil模块提供了copyfile()的函数，还可以
+# 在shutil模块中找到很多实用函数，它们可以看做是os模块的补充。
+import shutil
+shutil.copyfile('C:/windows/system.ini', os.path.join(os.path.abspath('.'), 'testfile.ini'))
+os.remove('testfile.ini')
+
+# 利用Python的特性来过滤文件
+# 列出当前目录下的所有目录
+print([x for x in os.listdir('.') if os.path.isdir(x)])
+# 列出所有的.py文件
+print([x for x in os.listdir('.') if os.path.isfile(x) and os.path.splitext(x)[1] == '.py'])
+
+print('#'*10, '3.操作文件和目录', 'start' if 0 else 'end', '#'*10)
 
