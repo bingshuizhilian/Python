@@ -7,6 +7,8 @@ __author__ = 'bingshuizhilian'
 
 
 
+# 仅支持一个客户端，收发消息阻塞
+
 import socket
 
 #待建立连接HOST的ip/port
