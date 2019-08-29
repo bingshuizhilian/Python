@@ -4,7 +4,6 @@
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-# 开启管道写入mysql需要在settings.py中打开ITEM_PIPELINES的注释
 
 import pymysql.cursors
 from scrapy import cmdline
@@ -12,12 +11,13 @@ from scrapy import cmdline
 class DoubanPipeline(object):
     def __init__(self):
         # 连接数据库
+        # 开启管道写入mysql需要在settings.py中打开ITEM_PIPELINES的注释
         self.connect = pymysql.connect(
             host = '127.0.0.1',
             port = 3306,
             db = 'douban',
             user = 'root',
-            passwd = '12345678',
+            passwd = 'bs06271989',
             charset = 'utf8',
             use_unicode = True
         )
