@@ -3,7 +3,7 @@
 
 ' exercise name：4.socket-threading-multiclient-server '
 
-__author__ = 'bingshuizhilian'
+__author__ = 'bingshuizhilian@yeah.net'
 
 
 
