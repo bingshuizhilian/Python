@@ -7,7 +7,7 @@ __author__ = 'bingshuizhilian'
 
 
 
-# 仅支持一个客户端，收发消息不阻塞
+# 收发消息不阻塞
 
 import socket, threading, datetime
 
