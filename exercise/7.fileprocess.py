@@ -7,19 +7,21 @@ __author__ = 'bingshuizhilian'
 
 
 
-FACTOR_STRING = '*9/10\n'
-lines = []
+import shutil
 
+SRC_FILE = '7.fileprocess-sample.h'
+FACTOR_STRING = ' * 9 / 10\n'
 
-if __name__ == "__main__":
-    with open('7.fileprocess-sample.h', 'r', encoding='utf-8') as f1:
-        lines = f1.readlines()
-    
+def ModifyWAVlengthForT1EProject(srcfile, makebkpfile = True):
+    srcfilebkp = srcfile + '.orig'
+    lines = []
+
+    if True == makebkpfile: shutil.copy(srcfile, srcfilebkp)
+    with open(srcfile, 'r', encoding='utf-8') as f: lines = f.readlines()
     for i in range(len(lines)):
         if lines[i].find('WAV_') >= 0 and lines[i].find('_LEN') >= 0:
-            lines[i].rstrip('\n')
-            lines[i] += FACTOR_STRING
-            print(lines[i])
+            lines[i] = lines[i][:-1] + FACTOR_STRING
+    with open(srcfile, 'w', encoding='utf-8') as f: f.writelines(lines)
 
-    with open('7.fileprocess-sample2.h', 'w', encoding='utf-8') as f2:
-        f2.writelines(lines)
+if __name__ == "__main__":
+    ModifyWAVlengthForT1EProject(SRC_FILE)
