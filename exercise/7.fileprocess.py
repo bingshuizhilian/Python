@@ -27,8 +27,7 @@ def ModifyWAVlengthForT1EProject(srcfile, makebkpfile = True):
             lines[i] = lines[i][:-1] + FACTOR_STRING
     
     if False == isalreadycatched:
-        if True == makebkpfile:
-            shutil.copy(srcfile, srcfilebkp)
+        if True == makebkpfile: shutil.copy(srcfile, srcfilebkp)
         with open(srcfile, 'w', encoding='utf-8') as f: f.writelines(lines)
         print('已处理')
     else:
