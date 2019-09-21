@@ -131,8 +131,7 @@ def GenerateApplicationFirmware(srcfile, destfile, addversioninfo = False):
 
         apps0line = 'S02100000747395957' + partnumber + '20' * (16 - len(partnumber) // 2) + '01'
         apps0line += binascii.b2a_hex(SW_VERSION.encode('utf-8')).decode('utf-8')
-        apps0checksum = CalcCheckSum(apps0line)
-        apps0line += apps0checksum + '\n'
+        apps0line += CalcCheckSum(apps0line) + '\n'
         appFile.insert(0, apps0line.upper())
 
         crc = CalcCRC16(appFile)
