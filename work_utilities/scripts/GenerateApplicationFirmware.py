@@ -59,10 +59,7 @@ crcLookupTable = (
 
 
 def SplitHexString(s):
-    ret = []
-    for i in range(0, len(s), 2):
-        ret.append(s[i:i+2])
-    return ret
+    return [s[i:i+2] for i in range(0, len(s), 2)]
 
 def CalcCheckSum(s):
     datalist = [int(v, 16) for v in SplitHexString(s) if not v.startswith(('S', 's'))]
