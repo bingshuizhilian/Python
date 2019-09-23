@@ -123,6 +123,6 @@ dmypy.json
 .pyre/
 
 # added by me
-*.bat
+#*.bat
 *.csv
 export_data/
