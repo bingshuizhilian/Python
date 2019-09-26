@@ -8,14 +8,25 @@ __createdate__ = '20190915'
 
 
 
-import os, shutil
+import os, shutil, json
 from datetime import datetime
 
+SW_VERSION = ''
+HW_VERSION = ''
+
+INFO_FILE = './midwares/icmbasicinfo.json'
 SRC_FILE = '../Debug/Exe/testTraveo.srec'
 DEST_FILE = '../firmware_release/CheryT1E_HC_sw_hw_dt.srec'
 
-SW_VERSION = '00.02.00'  # 软件版本号，仅影响生成的文件名，也可以后期直接在生成的文件名中修改
-HW_VERSION = '0.0.9'     # 硬件版本号
+
+
+def ReadIcmBasicInfo(infofile):
+    global SW_VERSION
+    global HW_VERSION
+    with open(infofile, 'r', encoding='utf-8') as f:
+        info = json.load(f)
+        SW_VERSION = info["software version"]
+        HW_VERSION = info["hardware version"]
 
 def DoReleaseFirmware(srcfile, destfile, addversioninfo = False):
     if not os.path.exists(os.path.split(DEST_FILE)[0]):
@@ -35,4 +46,5 @@ def DoReleaseFirmware(srcfile, destfile, addversioninfo = False):
         print('保存失败：', e)   
 
 if __name__ == "__main__":
+    ReadIcmBasicInfo(INFO_FILE)
     DoReleaseFirmware(SRC_FILE, DEST_FILE, True)

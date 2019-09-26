@@ -8,20 +8,29 @@ __createdate__ = '20190918'
 
 
 
-import os
+import os, json
 from datetime import datetime
 from copy import deepcopy
 
-SW_VERSION = '00.02.00'  # 软件版本号，仅影响生成的文件名，也可以后期直接在生成的文件名中修改
-HW_VERSION = '0.0.9'     # 硬件版本号
+SW_VERSION = ''
+HW_VERSION = ''
 
 PADDING_LINE = 'S31501A20000550101000000000000000000000000935D'
 
-BOOT_FILE = './MidFirmwares/Bootloader.srec'
+INFO_FILE = './midwares/icmbasicinfo.json'
+BOOT_FILE = './midwares/Bootloader.srec'
 SRC_FILE = '../Debug/Exe/testTraveo.srec'
 DEST_FILE = '../firmware_release/with_bootloader/CheryT1E_HC_sw_hw_withBootloader_dt.srec'
 
 
+
+def ReadIcmBasicInfo(infofile):
+    global SW_VERSION
+    global HW_VERSION
+    with open(infofile, 'r', encoding='utf-8') as f:
+        info = json.load(f)
+        SW_VERSION = info["software version"]
+        HW_VERSION = info["hardware version"]
 
 def GenerateFirmwareWithBootloader(bootfile, srcfile, destfile, addversioninfo = False):
     if not os.path.exists(os.path.split(DEST_FILE)[0]):
@@ -63,4 +72,5 @@ def GenerateFirmwareWithBootloader(bootfile, srcfile, destfile, addversioninfo =
         print('合成失败：', e)   
 
 if __name__ == "__main__":
+    ReadIcmBasicInfo(INFO_FILE)
     GenerateFirmwareWithBootloader(BOOT_FILE, SRC_FILE, DEST_FILE, True)
