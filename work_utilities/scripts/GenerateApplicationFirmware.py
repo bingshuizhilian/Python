@@ -11,12 +11,12 @@ __createdate__ = '20190918'
 import os, shutil, binascii, json
 from datetime import datetime
 from copy import deepcopy
+from ReadIcmBasicInfo import ReadIcmBasicInfo
 
 SW_VERSION = ''
 HW_VERSION = ''
 PART_NUMBER = ''
 
-INFO_FILE = './midwares/icmbasicinfo.json'
 SRC_FILE = '../Debug/Exe/testTraveo.srec'
 DEST_FILE = '../firmware_release/application_file/CheryT1E_HC_sw_hw_applicationFile_dt.srec'
 SRC_FLASH_DRIVER_FILE = './midwares/FlashDriver.srec'
@@ -91,16 +91,6 @@ def CalcCRC16(l):
         ret = '0' * (4 - len(ret)) + ret
     return ret
 
-def ReadIcmBasicInfo(infofile):
-    global SW_VERSION
-    global HW_VERSION
-    global PART_NUMBER
-    with open(infofile, 'r', encoding='utf-8') as f:
-        info = json.load(f)
-        SW_VERSION = info["software version"]
-        HW_VERSION = info["hardware version"]
-        PART_NUMBER = info["part number"]
-
 def GenerateApplicationFirmware(srcfile, destfile, addversioninfo = False):
     if not os.path.exists(os.path.split(DEST_FILE)[0]):
         os.makedirs(os.path.split(DEST_FILE)[0])
@@ -158,5 +148,8 @@ def GenerateApplicationFirmware(srcfile, destfile, addversioninfo = False):
         print('合成失败：', e)   
 
 if __name__ == "__main__":
-    ReadIcmBasicInfo(INFO_FILE)
+    info = ReadIcmBasicInfo()
+    SW_VERSION = info["software version"]
+    HW_VERSION = info["hardware version"]
+    PART_NUMBER = info["part number"]
     GenerateApplicationFirmware(SRC_FILE, DEST_FILE, addversioninfo = True)
