@@ -14,7 +14,7 @@ __createdate__ = '20191006'
 
 ORIG_BINARY_FILE = 'image.bin'
 OUTPUT_BINARY_FILE = 'output.bin'
-DIVIDE_FACTOR = 32*512
+DIVIDE_FACTOR = 32 * 512
 PADDIND_BYTES = b'\xff' * 512
 
 
