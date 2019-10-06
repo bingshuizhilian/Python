@@ -14,22 +14,20 @@ __createdate__ = '20191006'
 
 ORIG_BINARY_FILE = 'image.bin'
 OUTPUT_BINARY_FILE = 'output.bin'
-DEVIDE_FACTOR = 32*512
+DIVIDE_FACTOR = 32*512
 PADDIND_BYTES = b'\xff' * 512
 
 
 
 def ProcessBinaryFile(binfile = ORIG_BINARY_FILE, outfile = OUTPUT_BINARY_FILE):
     origBinFile = []
-    bufferedBinFile = []
-
     with open(binfile, 'rb') as fr:
         origBinFile = fr.read()
 
-    bufferedBinFile = [origBinFile[i:i+DEVIDE_FACTOR] for i in range(0, len(origBinFile), DEVIDE_FACTOR)]
+    bufferedBinFile = [origBinFile[i:i+DIVIDE_FACTOR] for i in range(0, len(origBinFile), DIVIDE_FACTOR)]
 
-    if len(bufferedBinFile[len(bufferedBinFile) - 1]) < DEVIDE_FACTOR:
-        bufferedBinFile[len(bufferedBinFile) - 1] += b'\xff' * (DEVIDE_FACTOR - len(bufferedBinFile[len(bufferedBinFile) - 1]))
+    if len(bufferedBinFile[len(bufferedBinFile) - 1]) < DIVIDE_FACTOR:
+        bufferedBinFile[len(bufferedBinFile) - 1] += b'\xff' * (DIVIDE_FACTOR - len(bufferedBinFile[len(bufferedBinFile) - 1]))
 
     with open(outfile, 'wb') as fw:
         for i in bufferedBinFile:
