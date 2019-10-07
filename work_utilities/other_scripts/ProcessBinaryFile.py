@@ -3,14 +3,12 @@
 
 ' 分割二进制文件 '
 
-r'''
-Python3.7.4下载地址为[Download Python](https://www.python.org/downloads/)，注意安装时需要勾选`添加路径到环境变量`
-'''
-
 __author__ = 'bingshuizhilian'
 __createdate__ = '20191006'
 
 
+
+import sys
 
 ORIG_BINARY_FILE = 'image.bin'
 OUTPUT_BINARY_FILE = 'output.bin'
@@ -37,4 +35,13 @@ def ProcessBinaryFile(binfile = ORIG_BINARY_FILE, outfile = OUTPUT_BINARY_FILE):
 
 
 if __name__ == "__main__":
-    ProcessBinaryFile(ORIG_BINARY_FILE, OUTPUT_BINARY_FILE)
+    try:
+        if 3 == len(sys.argv):
+            ProcessBinaryFile(sys.argv[1], sys.argv[2])
+        else:
+            ProcessBinaryFile()
+    except Exception as e:
+        print(e)
+        print('\nusage: ProcessBinaryFile.exe [infilepath, outfilepath]')
+        print('\nmail to bingshuizhilian@yeah.net for any question')
+        input('\npress any key to exit')
