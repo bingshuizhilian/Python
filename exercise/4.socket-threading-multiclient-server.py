@@ -20,7 +20,7 @@ __author__ = 'bingshuizhilian@yeah.net'
 也就是说，服务端需要为每一个连接创建一个线程。
 '''
 
-import socket
+import socket, os
 from threading import Thread
 from datetime import datetime
 
@@ -67,6 +67,10 @@ class ChatServer(object):
                         '输入2:给指定客户端发送消息\n'
                         '输入3:广播消息\n'
                         '输入4:关闭服务端\n')
+            if cmd == 'cs':
+                os.system('cls')
+                continue
+
             if '1' == cmd:
                 print("--------------------------")
                 print("当前在线人数：", len(self._connectPool))

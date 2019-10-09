@@ -9,7 +9,7 @@ __author__ = 'bingshuizhilian@yeah.net'
 
 # 支持多客户端，收发不阻塞
 
-import socket, socketserver
+import socket, socketserver, os
 from threading import Thread
 from datetime import datetime
 
@@ -39,6 +39,9 @@ class ChatServer(socketserver.BaseRequestHandler):
         # 主线程向客户端发送消息
         while True:
             msg = input()
+            if msg == 'cs':
+                os.system('cls')
+                continue
             self.request.sendall(msg.encode(encoding='utf-8'))
 
 

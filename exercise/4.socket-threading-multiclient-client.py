@@ -9,7 +9,7 @@ __author__ = 'bingshuizhilian@yeah.net'
 
 # 收发消息不阻塞
 
-import socket
+import socket, os
 from threading import Thread
 from datetime import datetime
 
@@ -26,6 +26,10 @@ class ChatClient(object):
                 self._keepConnect = False
                 print('服务器离线了，按任意键退出...')
                 break
+            elif 'cls' == msg:
+                os.system("cls")
+                msg = '道路千万条，安全第一条'
+
             print('%s:%d' % (client.getsockname()[0], client.getsockname()[1]) + datetime.now().strftime('@%Y%m%d-%H:%M:%S >> ') + msg)
 
     def run(self):
@@ -37,6 +41,9 @@ class ChatClient(object):
         while self._keepConnect:
             try:
                 msg = input()
+                if msg == 'cs':
+                    os.system('cs')
+                    continue
                 self._socketServer.send(msg.encode('utf-8'))
                 if 'exit' == msg:
                     self._keepConnect = False
