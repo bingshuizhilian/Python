@@ -42,7 +42,7 @@ class ChatClient(object):
             try:
                 msg = input()
                 if msg == 'cs':
-                    os.system('cs')
+                    os.system('cls')
                     continue
                 self._socketServer.send(msg.encode('utf-8'))
                 if 'exit' == msg:
