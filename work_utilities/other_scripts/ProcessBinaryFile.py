@@ -24,8 +24,8 @@ def ProcessBinaryFile(binfile = ORIG_BINARY_FILE, outfile = OUTPUT_BINARY_FILE):
 
     bufferedBinFile = [origBinFile[i:i+DIVIDE_FACTOR] for i in range(0, len(origBinFile), DIVIDE_FACTOR)]
 
-    if len(bufferedBinFile[len(bufferedBinFile) - 1]) < DIVIDE_FACTOR:
-        bufferedBinFile[len(bufferedBinFile) - 1] += b'\xff' * (DIVIDE_FACTOR - len(bufferedBinFile[len(bufferedBinFile) - 1]))
+    if len(bufferedBinFile[-1]) < DIVIDE_FACTOR:
+        bufferedBinFile[-1] += b'\xff' * (DIVIDE_FACTOR - len(bufferedBinFile[-1]))
 
     with open(outfile, 'wb') as fw:
         for i in bufferedBinFile:
