@@ -14,6 +14,7 @@ from GenerateFirmwareWithBootloader import GenerateFirmwareWithBootloader
 from GenerateApplicationFirmware import GenerateApplicationFirmware
 from ModifyWAVlength import ModifyWAVlength
 from ReadIcmBasicInfo import ReadIcmBasicInfo
+from GenerateFlashDriverFile import GenerateFlashDriverFile
 
 
 
@@ -21,6 +22,8 @@ def main():
     try:
         if sys.argv[1] == '-m':
             ModifyWAVlength(sys.argv[2])
+        elif sys.argv[1] == '-f':
+            GenerateFlashDriverFile(sys.argv[2], sys.argv[3])
         else:
             info = ReadIcmBasicInfo(sys.argv[2])
             swv = info["software version"]
