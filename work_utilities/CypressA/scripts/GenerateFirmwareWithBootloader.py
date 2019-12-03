@@ -21,7 +21,7 @@ PADDING_LINE = 'S31501A20000550101000000000000000000000000935D'
 INFO_FILE = './midwares/icmbasicinfo.json'
 BOOT_FILE = './midwares/Bootloader.srec'
 SRC_FILE = '../Debug/Exe/testTraveo.srec'
-DEST_FILE = '../firmware_release/with_bootloader/CheryT1E_HC_sw_hw_withBootloader_dt.srec'
+DEST_FILE = '../firmware_release/with_bootloader/Chery_model_sw_hw_withBootloader_dt.srec'
 
 
 
@@ -68,4 +68,6 @@ if __name__ == "__main__":
     info = ReadIcmBasicInfo()
     SW_VERSION = info["software version"]
     HW_VERSION = info["hardware version"]
+    model = info["model"]
+    DEST_FILE = DEST_FILE.replace('model', model)
     GenerateFirmwareWithBootloader(BOOT_FILE, SRC_FILE, DEST_FILE, True)

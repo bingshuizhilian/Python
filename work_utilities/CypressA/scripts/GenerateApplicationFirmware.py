@@ -18,9 +18,9 @@ HW_VERSION = ''
 PART_NUMBER = ''
 
 SRC_FILE = '../Debug/Exe/testTraveo.srec'
-DEST_FILE = '../firmware_release/application_file/CheryT1E_HC_sw_hw_applicationFile_dt.srec'
+DEST_FILE = '../firmware_release/application_file/Chery_model_sw_hw_applicationFile_dt.srec'
 SRC_FLASH_DRIVER_FILE = './midwares/FlashDriver.srec'
-DEST_FLASH_DRIVER_FILE = '../firmware_release/application_file/CheryT1E_HC_flashDriverFile.srec'
+DEST_FLASH_DRIVER_FILE = '../firmware_release/application_file/Chery_model_flashDriverFile.srec'
 
 crcLookupTable = (
     0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50A5, 0x60C6, 0x70E7,
@@ -152,4 +152,7 @@ if __name__ == "__main__":
     SW_VERSION = info["software version"]
     HW_VERSION = info["hardware version"]
     PART_NUMBER = info["part number"]
+    model = info["model"]
+    DEST_FILE = DEST_FILE.replace('model', model)
+    DEST_FLASH_DRIVER_FILE = DEST_FLASH_DRIVER_FILE.replace('model', model)
     GenerateApplicationFirmware(SRC_FILE, DEST_FILE, addversioninfo = True)

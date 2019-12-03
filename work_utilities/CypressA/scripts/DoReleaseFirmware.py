@@ -16,7 +16,7 @@ SW_VERSION = ''
 HW_VERSION = ''
 
 SRC_FILE = '../Debug/Exe/testTraveo.srec'
-DEST_FILE = '../firmware_release/CheryT1E_HC_sw_hw_dt.srec'
+DEST_FILE = '../firmware_release/Chery_model_sw_hw_dt.srec'
 
 
 
@@ -41,4 +41,6 @@ if __name__ == "__main__":
     info = ReadIcmBasicInfo()
     SW_VERSION = info["software version"]
     HW_VERSION = info["hardware version"]
+    model = info["model"]
+    DEST_FILE = DEST_FILE.replace('model', model)
     DoReleaseFirmware(SRC_FILE, DEST_FILE, True)
