@@ -1,4 +1,4 @@
-# 此work_utilities文件夹中的脚本为工作中实际使用的，在此同步
+# 此work_utilities文件夹中的脚本为实际使用的，在此同步
 - CypressA文件夹下脚本不需编译链接为exe文件即可通过CYPRESS工程工具包.bat使用
 - CypressB文件夹下脚本需编译链接为tools下的cypressutil.exe文件才可通过CYPRESS工程工具包.bat使用
 - midwares为配合脚本使用的中间文件
