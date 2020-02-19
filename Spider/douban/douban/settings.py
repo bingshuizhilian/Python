@@ -9,7 +9,6 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-
 BOT_NAME = 'douban'
 
 SPIDER_MODULES = ['douban.spiders']
@@ -17,9 +16,8 @@ NEWSPIDER_MODULE = 'douban.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-# USER_AGENT = 'douban (+http://www.yourdomain.com)'
+#USER_AGENT = 'douban (+http://www.yourdomain.com)'
 USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_3) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.54 Safari/536.5' 
-
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -55,9 +53,9 @@ ROBOTSTXT_OBEY = True
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-# DOWNLOADER_MIDDLEWARES = {
-#    'douban.middlewares.UserAgentMiddleWare': 300,
-# }
+#DOWNLOADER_MIDDLEWARES = {
+#    'douban.middlewares.DoubanDownloaderMiddleware': 543,
+#}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
@@ -68,9 +66,9 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 # 注意数据库配置
-# ITEM_PIPELINES = {
-#    'douban.pipelines.DoubanPipeline': 300,
-# }
+ITEM_PIPELINES = {
+   'douban.pipelines.DoubanPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
