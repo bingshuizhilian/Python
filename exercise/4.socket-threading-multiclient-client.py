@@ -15,8 +15,8 @@ from datetime import datetime
 
 class ChatClient(object):
     def __init__(self, address):
-        self._socketServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # 创建socket对象，连接服务器
-        self._socketServer.connect(address)
+        self._socketClient = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # 创建socket对象，连接服务器
+        self._socketClient.connect(address)
         self._keepConnect = True
 
     def recv_message_handler(self, client):
@@ -34,7 +34,7 @@ class ChatClient(object):
 
     def run(self):
         # 开独立线程接收服务器消息
-        t = Thread(target=self.recv_message_handler, args=(self._socketServer,))
+        t = Thread(target=self.recv_message_handler, args=(self._socketClient,))
         t.setDaemon(True)
         t.start()
         # 主线程向服务器发送消息
@@ -44,19 +44,19 @@ class ChatClient(object):
                 if msg == 'cs':
                     os.system('cls')
                     continue
-                self._socketServer.send(msg.encode('utf-8'))
+                self._socketClient.send(msg.encode('utf-8'))
                 if 'exit' == msg:
                     self._keepConnect = False
             except Exception as e:
                 print('client error occured:', e)
 
-        self._socketServer.close()
+        self._socketClient.close()
         exit()
 
 if __name__ == "__main__":
     ip_addr = input('输入服务端IP地址([1]：默认IP、[2]：本机IP、[其他]：自定义IP)：').strip()
     if '1' == ip_addr:
-        ip_addr = '192.168.1.77'
+        ip_addr = '192.168.0.101'
     elif '2' == ip_addr:
         pcname = socket.getfqdn(socket.gethostname())
         ip_addr = socket.gethostbyname(pcname)
