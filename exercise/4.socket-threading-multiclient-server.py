@@ -47,13 +47,17 @@ class ChatServer(object):
         # 消息处理
         client.sendall("连接服务器成功!".encode(encoding='utf8'))
         while True:
-            recBytes = client.recv(1024).decode('utf-8')
-            if len(recBytes) == 0 or 'exit' == recBytes:
-                client.close()
+            try:
+                recBytes = client.recv(1024).decode('utf-8')
+                if len(recBytes) == 0 or 'exit' == recBytes:
+                    client.close()
+                    self._connectPool.remove(client)
+                    print("客户端{}下线了。".format(address))
+                    break
+                print('%s:%d' % (address[0], address[1]) + datetime.now().strftime('@%Y%m%d-%H:%M:%S >> ')+ recBytes)
+            except Exception as e:
                 self._connectPool.remove(client)
-                print("客户端{}下线了。".format(address))
-                break
-            print('%s:%d' % (address[0], address[1]) + datetime.now().strftime('@%Y%m%d-%H:%M:%S >> ')+ recBytes)
+                print('client error occured:', e)
 
     def run(self):
         # 开独立线程处理多客户端连接
@@ -65,8 +69,8 @@ class ChatServer(object):
             cmd = input('--------------------------\n'
                         '输入1:查看当前在线人数\n'
                         '输入2:给指定客户端发送消息\n'
-                        '输入3:广播消息\n'
-                        '输入4:关闭服务端\n')
+                        '输入3:关闭服务端\n'
+                        '其它 :广播消息\n')
             if cmd == 'cs':
                 os.system('cls')
                 continue
@@ -82,21 +86,26 @@ class ChatServer(object):
                 else:
                     print('索引%d不存在' % int(index))
             elif '3' == cmd:
-                print("--------------------------")
-                msg = input("请输入广播消息：")
-                for i in range(len(self._connectPool)):
-                    self._connectPool[i].sendall(msg.encode(encoding='utf-8'))
-            else:
                 for i in range(len(self._connectPool)):
                     self._connectPool[i].sendall('exit'.encode(encoding='utf-8'))
                 exit()
+            else:
+                print("--------------------------")
+                print("[广播消息]：" + cmd)
+                for i in range(len(self._connectPool)):
+                    self._connectPool[i].sendall(cmd.encode(encoding='utf-8'))
         
         self._socketServer.close()
         exit()
 
 if __name__ == "__main__":
-    pcname = socket.getfqdn(socket.gethostname())
-    ip_addr = socket.gethostbyname(pcname)
+    ip_addr = input('输入服务端IP地址([1]：默认IP、[2]：本机IP、[其他]：自定义IP)：').strip()
+    if '1' == ip_addr:
+        ip_addr = '192.168.0.101'
+    elif '2' == ip_addr:
+        pcname = socket.getfqdn(socket.gethostname())
+        ip_addr = socket.gethostbyname(pcname)
+
     ADDRESS = (ip_addr, 9999)  # 绑定地址
     
     cs = ChatServer(ADDRESS)
